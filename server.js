@@ -3,8 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-const destinationRoutes = require("./routes/destination.routes");
-const authRoutes = require("./routes/auth.routes");
+const router = require('./routes/router')
 
 const errorHandler = require("./middleware/error.middleware");
 
@@ -21,8 +20,15 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/destinations", destinationRoutes);
-app.use("/api/auth", authRoutes);
+app.use('/api', router)
+
+// Test route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Egypt Explorer API is running"
+  });
+});
 
 // 404 handler
 app.use((req, res, next) => {
@@ -37,14 +43,6 @@ app.use((req, res, next) => {
 
 // Centralized error handler
 app.use(errorHandler);
-
-// Test route
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Egypt Explorer API is running"
-  });
-});
 
 const PORT = process.env.PORT || 5000;
 
